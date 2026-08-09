@@ -1,51 +1,252 @@
 ---
-import "~/styles/reset.css";
-import "~/styles/base.css";
+const { title = "Portfolio", description = "Photography Portfolio" } =
+  Astro.props;
 
-import smartypants from "smartypants";
+const currentPath = Astro.url.pathname;
 
-const siteName = "Astro Photo Grid";
-
-export interface Props {
-  title: string;
-  description: string;
-  image?: {
-    src: string;
-    alt: string;
-  };
-}
-
-const { title, description, image } = Astro.props;
-
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-const pageTitle = Astro.url.pathname === "/" ? title : `${title} · ${siteName}`;
+const navLinks = [
+  { href: "/", label: "Portfolio" },
+  { href: "/booking", label: "Booking Calendar" },
+  { href: "/contact", label: "Contact" },
+  { href: "/license", label: "License" },
+];
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="canonical" href={canonicalURL} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title set:html={smartypants(pageTitle, 1)} />
-    <meta name="description" content={smartypants(description, 1)} />
-    <meta property="og:title" content={smartypants(title, 1)} />
-    <meta property="og:type" content="website" />
-    <meta property="og:description" content={smartypants(description, 1)} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content={siteName} />
-    {
-      image && (
-        <>
-          <meta property="og:image" content={image.src} />
-          <meta property="og:image:alt" content={image.alt} />
-        </>
-      )
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
   </head>
   <body>
-    <slot />
+    <!-- MOBILE HEADER (Only shows on phones) -->
+    <header class="mobile-header">
+      <a href="/" class="mobile-logo">Jan Szerling</a>
+      <button id="menu-toggle" aria-label="Toggle Menu">Menu</button>
+    </header>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar" id="sidebar-nav">
+      <div class="sidebar-top">
+        <!-- Branding Area -->
+        <a href="/" class="brand-container" aria-label="Home">
+          <span class="brand-name">Jan Szerling</span>
+        </a>
+
+        <!-- Navigation Links -->
+        <nav class="nav-links">
+          {
+            navLinks.map((link) => (
+              <a
+                href={link.href}
+                class:list={{ active: currentPath === link.href }}
+              >
+                {link.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+
+      <!-- Sidebar Bottom (Socials) -->
+      <div class="sidebar-bottom">
+        <div class="social-icons">
+          <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+          </a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+          </a>
+          <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          </a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      <slot />
+    </main>
+
+    <!-- Mobile menu toggle script -->
+    <script>
+      const toggleBtn = document.getElementById("menu-toggle");
+      const sidebar = document.getElementById("sidebar-nav");
+      toggleBtn?.addEventListener("click", () => {
+        sidebar?.classList.toggle("open");
+      });
+    </script>
   </body>
 </html>
+
+<style>
+  :global(body) {
+    background-color: #0a0a0a !important;
+    color: #b3b3b3;
+    margin: 0;
+    font-family: Cambria, Georgia, serif;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* --- DESKTOP SIDEBAR --- */
+  .sidebar {
+    width: 200px;
+    background-color: #0a0a0a;
+    border-right: 1px solid #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    padding: 40px 20px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  .sidebar-top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .brand-container {
+    text-decoration: none;
+    display: block;
+    margin-bottom: 40px;
+  }
+
+  .brand-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+  }
+
+  .nav-links a {
+    color: #999;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: #fff;
+  }
+
+  .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 16px;
+  }
+
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .social-icons a {
+    color: #666;
+    transition: color 0.2s ease;
+  }
+
+  .social-icons a:hover {
+    color: #fff;
+  }
+
+  /* --- MAIN CONTENT AREA --- */
+  .main-content {
+    margin-left: 200px;
+    flex-grow: 1;
+    min-height: 100vh;
+    padding: 30px 40px;
+    box-sizing: border-box;
+  }
+
+  /* --- MOBILE HEADER --- */
+  .mobile-header {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    :global(body) {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100vh;
+      background: #0a0a0a;
+      transition: left 0.3s ease;
+      padding: 80px 40px;
+      box-sizing: border-box;
+      z-index: 999;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .main-content {
+      margin-left: 0;
+      margin-top: 60px;
+      padding: 20px;
+    }
+
+    .mobile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background: #0a0a0a;
+      border-bottom: 1px solid #1f1f1f;
+      padding: 0 20px;
+      box-sizing: border-box;
+      z-index: 1000;
+    }
+
+    .mobile-logo {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    #menu-toggle {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+  }
+</style>

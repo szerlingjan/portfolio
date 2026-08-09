@@ -19,7 +19,9 @@
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.3",
     "@fancyapps/ui": "^6.1.14",
+    "@fontsource/inter": "^5.3.0",
     "astro": "^7.1.6",
+    "jszip": "^3.10.1",
     "smartypants": "^0.2.2",
     "typescript": "^6.0.3"
   },

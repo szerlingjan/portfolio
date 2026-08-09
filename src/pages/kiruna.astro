@@ -1,144 +1,30 @@
 ---
-import { Image } from "astro:assets";
+import GalleryDownloadAll from "~/components/GalleryDownloadAll.astro";
+import GalleryGrid from "~/components/GalleryGrid.astro";
 import BaseLayout from "~/layouts/BaseLayout.astro";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { loadGalleryImages } from "~/utils/loadGalleryImages";
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "../images/kiruna/*.{jpg,jpeg,png,webp}",
 );
+
+const galleryImages = await loadGalleryImages(images);
+const downloadImages = galleryImages.map(({ src, filename }) => ({
+  src,
+  filename,
+}));
 ---
 
 <BaseLayout
-  title="Isaberg Gallery"
+  title="Pumptrack Arctic Series - Kiruna"
   description="Photography Portfolio Gallery"
 >
-  <section class="justified-gallery" id="photoswipe">
-    {
-      Object.entries(images).map(async ([_path, image], index) => {
-        const { default: imageData } = await image();
-        return (
-          <div class="gallery-item" style={`--width: ${imageData.width}; --height: ${imageData.height};`}>
-            <a
-              href={imageData.src}
-              target="_blank"
-              data-fancybox="gallery"
-            >
-              <Image
-                format="webp"
-                src={imageData}
-                alt=""
-                height={400}
-                loading={index < 20 ? "eager" : "lazy"}
-              />
-            </a>
-            <!-- Download Button Overlay -->
-            <a href={imageData.src} download class="download-btn" title="Download Image">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-            </a>
-          </div>
-        );
-      })
-    }
-  </section>
+  <GalleryDownloadAll galleryName="kiruna" images={downloadImages} />
+  <GalleryGrid images={galleryImages} />
 </BaseLayout>
-
-<script>
-  import { Fancybox } from "@fancyapps/ui/dist/fancybox/";
-
-  Fancybox.bind("[data-fancybox]", {
-    theme: "auto",
-    mainStyle: {
-      "--f-button-width": "44px",
-      "--f-button-height": "44px",
-      "--f-button-border-radius": "50%",
-      "--f-toolbar-padding": "16px",
-    },
-    Carousel: {
-      Arrows: false,
-      Toolbar: {
-        display: {
-          left: [],
-          middle: [],
-          right: ["close"],
-        },
-      },
-      transition: "slide",
-    },
-  });
-</script>
 
 <style>
   :global(body) {
     background-color: #0a0a0a !important;
-  }
-
-  .justified-gallery {
-    --padding: max(2.5vw, 12px);
-    --space: max(2.5vw, 12px);
-    --min-height: clamp(200px, 20vw, 400px);
-
-    padding: var(--padding);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space);
-    max-width: 1400px;
-    margin: 0 auto;
-
-    .gallery-item {
-      position: relative;
-      flex-grow: calc(var(--width) * (100000 / var(--height)));
-      flex-basis: calc(var(--min-height) * (var(--width) / var(--height)));
-      aspect-ratio: var(--width) / var(--height);
-      overflow: hidden;
-    }
-
-    a {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    a img {
-      display: block;
-      object-fit: cover;
-      height: 100%;
-      width: 100%;
-      border-radius: 0 !important;
-    }
-
-    /* Styling for the download icon button */
-    .download-btn {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      width: 36px;
-      height: 36px;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
-      border-radius: 0 !important;
-      z-index: 2;
-    }
-
-    .gallery-item:hover .download-btn {
-      opacity: 1;
-    }
-
-    .download-btn:hover {
-      background: rgba(0, 0, 0, 0.9);
-    }
-
-    &::after {
-      content: " ";
-      flex-grow: 1000000000;
-    }
   }
 </style>
