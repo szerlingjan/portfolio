@@ -1,106 +1,129 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "~/layouts/BaseLayout.astro";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  "../images/*.{jpg,jpeg,png,webp}",
-);
+// 1. IMPORT ALL YOUR COVER PHOTOS HERE AT THE TOP
+
+import hotpotCover from "../images/hotpot-cover.jpg";
+import isabergCover from "../images/isaberg-cover.jpg";
+import kirunaCover from "../images/kiruna-cover.jpg";
+
+// 2. THE GALLERY LIST: Add new shoots here effortlessly!
+
+const galleries = [
+  {
+    title: "Isaberg Session",
+    subtitle: "8.08.2026",
+    url: "/isaberg26",
+    cover: isabergCover,
+  },
+  {
+    title: "China Hotpot Bakalarska",
+    subtitle: "27.07.2026",
+    url: "/hotpot",
+    cover: hotpotCover,
+  },
+  {
+    title: "Pumptrack Arctic Series - Kiruna",
+    subtitle: "View 24 Photos",
+    url: "/kiruna",
+    cover: kirunaCover,
+  },
+];
 ---
 
-<BaseLayout
-  title="Astro Photo Grid"
-  description="A minimal, single-page photo gallery for Astro."
->
-  <section class="justified-gallery" id="photoswipe">
-    {
-      Object.entries(images).map(async ([_path, image], index) => {
-        const { default: imageData } = await image();
-        return (
-          <a
-            style={`--width: ${imageData.width}; --height: ${imageData.height};`}
-            href={imageData.src}
-            target="_blank"
-            data-fancybox="gallery"
-          >
-            <Image
-              format="webp"
-              src={imageData}
-              alt=""
-              height={400}
-              loading={index < 20 ? "eager" : "lazy"}
-            />
-          </a>
-        );
-      })
-    }
-  </section>
+<BaseLayout title="Portfolio" description="Photography Portfolio">
+  <main class="justified-gallery">
+    
+    {galleries.map(async (gallery) => {
+      // Extract original image width and height to calculate the justified proportions automatically
+      const imgMeta = gallery.cover;
+      return (
+        <a 
+          href={gallery.url} 
+          class="gallery-item" 
+          style={`--width: ${imgMeta.width}; --height: ${imgMeta.height};`}
+        >
+          <Image src={gallery.cover} alt={gallery.title} />
+          <div class="hover-text">
+            <h2>{gallery.title}</h2>
+            <p>{gallery.subtitle}</p>
+          </div>
+        </a>
+      );
+    })}
+
+  </main>
 </BaseLayout>
 
-<script>
-  import { Fancybox } from "@fancyapps/ui/dist/fancybox/";
-
-  Fancybox.bind("[data-fancybox]", {
-    theme: "auto",
-    mainStyle: {
-      "--f-button-width": "44px",
-      "--f-button-height": "44px",
-      "--f-button-border-radius": "50%",
-      "--f-toolbar-padding": "16px",
-    },
-    Carousel: {
-      Arrows: false,
-      Toolbar: {
-        display: {
-          left: [],
-          middle: [],
-          right: ["close"],
-        },
-      },
-      transition: "slide",
-    },
-  });
-</script>
-
 <style>
+  :global(body) {
+    background-color: #0a0a0a !important;
+  }
+
+  /* Uses the exact same justified masonry engine as your gallery pages */
   .justified-gallery {
-    --padding: max(2.5vw, 12px);
-    --space: max(2.5vw, 12px);
-    --min-height: clamp(200px, 20vw, 400px);
+    --padding: 24px;
+    --space: 12px; /* Smaller gap means bigger photos */
+    --min-height: clamp(250px, 28vw, 650px); /* Balanced height scaling */
 
     padding: var(--padding);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space);
+    max-width: 1900px; /* Expands the grid wider across your PC monitor */
+    margin: 0 auto;
 
-    a {
+    .gallery-item {
+      position: relative;
+      display: block;
       flex-grow: calc(var(--width) * (100000 / var(--height)));
       flex-basis: calc(var(--min-height) * (var(--width) / var(--height)));
       aspect-ratio: var(--width) / var(--height);
       overflow: hidden;
-      opacity: 1;
-      transition: all 0.05s ease-in-out;
+      border-radius: 0 !important;
     }
 
-    a img {
+    .gallery-item img {
       display: block;
       object-fit: cover;
       height: 100%;
       width: 100%;
+      border-radius: 0 !important;
     }
 
-    a:focus-visible {
-      outline: 3px solid var(--outline);
-      outline-offset: 2px;
-      transform: scale(1.05);
-      z-index: 1;
-      border-radius: 2px;
-      box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.1);
-    }
-
-    a.hidden {
-      transition: opacity 0.4s ease-in-out;
+    .hover-text {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .hover-text h2 {
+      margin: 0 0 6px 0;
+      font-weight: 400;
+      letter-spacing: 1px;
+      font-size: 1.5rem;
+    }
+
+    .hover-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      opacity: 0.8;
+      letter-spacing: 0.5px;
+    }
+
+    .gallery-item:hover .hover-text {
+      opacity: 1;
     }
 
     &::after {
