@@ -1,0 +1,73 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Online Booking" description="Schedule a session, consultation, or commercial project with Jan Szerling">
+  <div class="booking-page">
+    <div class="booking-header">
+      <h1>Online Booking</h1>
+      <p>Select a session type below to view availability and schedule your project.</p>
+    </div>
+
+    <!-- Direct Cal.com Iframe Embed -->
+    <div class="calendar-container">
+      <iframe 
+        src="https://cal.com/jan-szerling-f5ea7x?embed=true" 
+        width="100%" 
+        height="750px" 
+        frameborder="0"
+        title="Schedule a Booking with Jan Szerling"
+      ></iframe>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .booking-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #ffffff;
+  }
+
+  .booking-header {
+    margin-bottom: 30px;
+  }
+
+  .booking-header h1 {
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .booking-header p {
+    color: #888888;
+    font-size: 1rem;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  /* Removes the outer box styling so the calendar sits flat */
+  .calendar-container {
+    width: 100%;
+  }
+
+  .calendar-container iframe {
+    width: 100%;
+    height: 750px;
+    border: none;
+    background: transparent;
+  }
+
+  @media (max-width: 768px) {
+    .booking-page {
+      margin: 20px auto;
+      padding: 0 12px;
+    }
+
+    .calendar-container iframe {
+      height: 650px;
+    }
+  }
+</style>

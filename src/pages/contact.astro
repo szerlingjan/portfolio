@@ -1,0 +1,213 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Contact" description="Get in touch with Jan Szerling">
+  <div class="contact-page">
+    <div class="contact-header">
+      <h1>Let's get in Touch</h1>
+      <p>Available for commercial assignments, race coverage, and brand collaborations worldwide.</p>
+    </div>
+
+    <div class="contact-grid">
+      <!-- Left Column: Direct Info & Socials -->
+      <div class="contact-info">
+        <div class="info-group">
+          <h3>Direct</h3>
+          <a href="mailto:szerlingjan@gmail.com" class="info-link">szerlingjan@gmail.com</a>
+          <a href="tel:+48000000000" class="info-link">+48 000 000 000</a>
+        </div>
+
+        <div class="info-group">
+          <h3>Socials</h3>
+          <div class="social-links">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Mailto Contact Form -->
+      <form id="contactForm" class="contact-form">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" required placeholder="Your name" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required placeholder="Your email address" />
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="6" required placeholder="Tell me about your project..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contactForm') as HTMLFormElement;
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = (document.getElementById('name') as HTMLInputElement).value;
+      const email = (document.getElementById('email') as HTMLInputElement).value;
+      const message = (document.getElementById('textarea') || document.getElementById('message')) as HTMLTextAreaElement;
+      
+      const messageText = message ? message.value : '';
+
+      // Set your recipient email here
+      const recipient = 'szerlingjan@gmail.com';
+      const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+      const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${messageText}`);
+
+      // Triggers the user's default mailing app
+      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    });
+  }
+</script>
+
+<style>
+  .contact-page {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #ffffff;
+  }
+
+  .contact-header {
+    margin-bottom: 50px;
+  }
+
+  .contact-header h1 {
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .contact-header p {
+    color: #888888;
+    font-size: 1rem;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 60px;
+  }
+
+  .info-group {
+    margin-bottom: 40px;
+  }
+
+  .info-group h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #666666;
+    margin-bottom: 16px;
+  }
+
+  .info-link {
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    transition: opacity 0.2s;
+  }
+
+  .info-link:hover {
+    opacity: 0.7;
+  }
+
+  .social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .social-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: opacity 0.2s;
+  }
+
+  .social-links a:hover {
+    opacity: 0.7;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group label {
+    font-size: 0.85rem;
+    color: #888888;
+    letter-spacing: 0.5px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background-color: #141414;
+    border: 1px solid #262626;
+    border-radius: 0;
+    padding: 14px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: #666666;
+  }
+
+  .submit-btn {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 14px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-self: flex-start;
+  }
+
+  .submit-btn:hover {
+    background-color: #cccccc;
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .contact-page {
+      margin: 20px auto;
+    }
+  }
+</style>

@@ -1,0 +1,157 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Licensing" description="Image licensing and usage terms for photography by Jan Szerling">
+  <div class="licensing-page">
+    <div class="licensing-header">
+      <h1>Image Licensing</h1>
+      <p>All photographs published on this website are protected by copyright law and are available for commercial, editorial, and private licensing.</p>
+    </div>
+
+    <div class="licensing-sections">
+      <section class="license-card">
+        <h2>Commercial & Brand Use</h2>
+        <p>Ideal for outdoor brands, event organizers, agencies, and publications requiring high-resolution imagery for advertising, marketing campaigns, or social media usage.</p>
+        <ul>
+          <li>Full resolution digital delivery</li>
+          <li>Specified usage duration and media channels (print, web, social)</li>
+          <li>Exclusive or non-exclusive buyout options available</li>
+        </ul>
+      </section>
+
+      <section class="license-card">
+        <h2>Editorial & Press Coverage</h2>
+        <p>Specialized rates and rights for magazines, news outlets, and digital publications covering action sports, racing series, and cultural events.</p>
+        <ul>
+          <li>Standard press syndication rates</li>
+          <li>Byline requirement (Photo: Jan Szerling)</li>
+          <li>Quick turnaround licensing agreements</li>
+        </ul>
+      </section>
+
+      <section class="license-card">
+        <h2>Prints & Private Collection</h2>
+        <p>Fine art prints and physical wall displays are available for private collectors, athletes, and fans.</p>
+        <ul>
+          <li>Museum-grade archival paper and finishes</li>
+          <li>Custom sizing upon request</li>
+          <li>Hand-inspected and signed editions</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="licensing-cta">
+      <h3>Need a custom quote?</h3>
+      <p>Reach out directly with your project details, intended media, and duration to secure usage rights.</p>
+      <a href="/contact" class="cta-button">Inquire Now</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .licensing-page {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    color: #ffffff;
+  }
+
+  .licensing-header {
+    margin-bottom: 50px;
+  }
+
+  .licensing-header h1 {
+    font-size: 2.2rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+
+  .licensing-header p {
+    color: #888888;
+    font-size: 1rem;
+    max-width: 700px;
+    line-height: 1.5;
+  }
+
+  .licensing-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 60px;
+  }
+
+  .license-card {
+    background-color: #141414;
+    border: 1px solid #262626;
+    padding: 30px;
+  }
+
+  .license-card h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: #ffffff;
+  }
+
+  .license-card p {
+    color: #888888;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .license-card ul {
+    list-style-type: disc;
+    padding-left: 20px;
+    color: #cccccc;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .licensing-cta {
+    border-top: 1px solid #222222;
+    padding-top: 40px;
+  }
+
+  .licensing-cta h3 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .licensing-cta p {
+    color: #888888;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  .cta-button {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #000000;
+    text-decoration: none;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+
+  .cta-button:hover {
+    background-color: #cccccc;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .licensing-page {
+      margin: 20px auto;
+    }
+    
+    .license-card {
+      padding: 20px;
+    }
+  }
+</style>

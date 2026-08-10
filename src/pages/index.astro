@@ -3,13 +3,11 @@ import { Image } from "astro:assets";
 import BaseLayout from "~/layouts/BaseLayout.astro";
 
 // 1. IMPORT ALL YOUR COVER PHOTOS HERE AT THE TOP
-
 import hotpotCover from "../images/hotpot-cover.jpg";
 import isabergCover from "../images/isaberg-cover.jpg";
 import kirunaCover from "../images/kiruna-cover.jpg";
 
 // 2. THE GALLERY LIST: Add new shoots here effortlessly!
-
 const galleries = [
   {
     title: "Isaberg Session",
@@ -35,21 +33,31 @@ const galleries = [
 <BaseLayout title="Portfolio" description="Photography Portfolio">
   <main class="justified-gallery">
     
-    {galleries.map(async (gallery) => {
-      // Extract original image width and height to calculate the justified proportions automatically
+    {galleries.map((gallery) => {
       const imgMeta = gallery.cover;
+      const isLandscape = imgMeta.width > imgMeta.height;
+      
       return (
-        <a 
-          href={gallery.url} 
-          class="gallery-item" 
-          style={`--width: ${imgMeta.width}; --height: ${imgMeta.height};`}
-        >
-          <Image src={gallery.cover} alt={gallery.title} />
-          <div class="hover-text">
+        <div class={`gallery-container ${isLandscape ? 'landscape' : 'portrait'}`}>
+          <a 
+            href={gallery.url} 
+            class="gallery-item" 
+            style={`--width: ${imgMeta.width}; --height: ${imgMeta.height};`}
+          >
+            <div class="image-wrapper">
+              <Image src={gallery.cover} alt={gallery.title} />
+              <div class="hover-text">
+                <h2>{gallery.title}</h2>
+                <p>{gallery.subtitle}</p>
+              </div>
+            </div>
+          </a>
+          
+          <a href={gallery.url} class="mobile-caption">
             <h2>{gallery.title}</h2>
             <p>{gallery.subtitle}</p>
-          </div>
-        </a>
+          </a>
+        </div>
       );
     })}
 
@@ -61,74 +69,129 @@ const galleries = [
     background-color: #0a0a0a !important;
   }
 
-  /* Uses the exact same justified masonry engine as your gallery pages */
   .justified-gallery {
-    --padding: 24px;
-    --space: 12px; /* Smaller gap means bigger photos */
-    --min-height: clamp(250px, 28vw, 650px); /* Balanced height scaling */
-
+    --padding: 40px;
+    --space: 24px;
     padding: var(--padding);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space);
-    max-width: 1900px; /* Expands the grid wider across your PC monitor */
+    max-width: 1500px;
     margin: 0 auto;
+  }
 
-    .gallery-item {
-      position: relative;
-      display: block;
-      flex-grow: calc(var(--width) * (100000 / var(--height)));
-      flex-basis: calc(var(--min-height) * (var(--width) / var(--height)));
-      aspect-ratio: var(--width) / var(--height);
-      overflow: hidden;
-      border-radius: 0 !important;
+  /* Structural wrapper for each gallery item + its caption */
+  .justified-gallery .gallery-container.landscape {
+    width: 100%;
+  }
+
+  .justified-gallery .gallery-container.portrait {
+    width: calc(50% - (var(--space) / 2));
+  }
+
+  .justified-gallery .gallery-item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 0 !important;
+    text-decoration: none !important;
+  }
+
+  .justified-gallery .image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .justified-gallery img {
+    display: block;
+    object-fit: cover;
+    width: 100%;
+    height: auto;
+    max-height: 85vh;
+    aspect-ratio: var(--width) / var(--height);
+    border-radius: 0 !important;
+  }
+
+  /* PC Hover Overlay */
+  .justified-gallery .hover-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .justified-gallery .hover-text h2 {
+    margin: 0 0 6px 0;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+  }
+
+  .justified-gallery .hover-text p {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    letter-spacing: 0.5px;
+  }
+
+  .justified-gallery .gallery-item:hover .hover-text {
+    opacity: 1;
+  }
+
+  /* Completely hidden on PC */
+  .justified-gallery .mobile-caption {
+    display: none !important;
+  }
+
+  /* Mobile Layout */
+  @media (max-width: 768px) {
+    .justified-gallery {
+      padding: 0 16px;
+      gap: 36px;
     }
 
-    .gallery-item img {
-      display: block;
-      object-fit: cover;
-      height: 100%;
+    .justified-gallery .gallery-container.landscape,
+    .justified-gallery .gallery-container.portrait {
       width: 100%;
-      border-radius: 0 !important;
     }
 
-    .hover-text {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.3s ease-in-out;
+    /* Disable hover effects entirely on mobile */
+    .justified-gallery .hover-text {
+      display: none !important;
     }
 
-    .hover-text h2 {
-      margin: 0 0 6px 0;
+    /* Show caption below photo on mobile */
+    .justified-gallery .mobile-caption {
+      display: block !important;
+      padding-top: 10px;
+      text-decoration: none !important;
+    }
+
+    .justified-gallery .mobile-caption h2 {
+      margin: 0 0 4px 0;
       font-weight: 400;
-      letter-spacing: 1px;
-      font-size: 1.5rem;
-    }
-
-    .hover-text p {
-      margin: 0;
-      font-size: 0.9rem;
-      opacity: 0.8;
+      font-size: 1.1rem;
       letter-spacing: 0.5px;
+      color: #ffffff !important;
+      text-decoration: none;
     }
 
-    .gallery-item:hover .hover-text {
-      opacity: 1;
-    }
-
-    &::after {
-      content: " ";
-      flex-grow: 1000000000;
+    .justified-gallery .mobile-caption p {
+      margin: 0;
+      font-size: 0.85rem;
+      opacity: 0.6;
+      color: #cccccc !important;
+      text-decoration: none;
     }
   }
 </style>
