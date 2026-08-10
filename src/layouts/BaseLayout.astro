@@ -22,6 +22,16 @@ const pageTitle = Astro.url.pathname === "/" ? title : `${title} · ${siteName}`
 
 const base = import.meta.env.BASE_URL;
 const cleanBase = base.replace(/\/$/, "");
+
+// Centralized navigation array.
+// Whenever you add a new page in the future, just add it here once
+// and it will automatically update both desktop and mobile menus with proper base paths and trailing slashes!
+const navItems = [
+  { label: "Portfolio", href: `${cleanBase}/` },
+  { label: "Online Booking", href: `${cleanBase}/booking/` },
+  { label: "Contact", href: `${cleanBase}/contact/` },
+  { label: "Licensing", href: `${cleanBase}/licensing/` },
+];
 ---
 
 <html lang="en">
@@ -62,10 +72,9 @@ const cleanBase = base.replace(/\/$/, "");
 
       <!-- Collapsible Mobile Menu Drawer -->
       <nav class="mobile-nav" id="mobileNav">
-        <a href={`${cleanBase}/`}>Portfolio</a>
-        <a href={`${cleanBase}/booking`}>Online Booking</a>
-        <a href={`${cleanBase}/contact`}>Contact</a>
-        <a href={`${cleanBase}/licensing`}>Licensing</a>
+        {navItems.map((item) => (
+          <a href={item.href}>{item.label}</a>
+        ))}
         <div class="mobile-socials">
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -80,10 +89,9 @@ const cleanBase = base.replace(/\/$/, "");
             <h1 class="brand-name">Jan Szerling</h1>
           </a>
           <nav class="nav-links">
-            <a href={`${cleanBase}/`}>Portfolio</a>
-            <a href={`${cleanBase}/booking`}>Online Booking</a>
-            <a href={`${cleanBase}/contact`}>Contact</a>
-            <a href={`${cleanBase}/licensing`}>Licensing</a>
+            {navItems.map((item) => (
+              <a href={item.href}>{item.label}</a>
+            ))}
           </nav>
         </div>
 
