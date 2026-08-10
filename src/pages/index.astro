@@ -7,24 +7,27 @@ import hotpotCover from "../images/hotpot-cover.jpg";
 import isabergCover from "../images/isaberg-cover.jpg";
 import kirunaCover from "../images/kirunacover.jpg";
 
+const base = import.meta.env.BASE_URL;
+const cleanBase = base.replace(/\/$/, "");
+
 // 2. THE GALLERY LIST: Add new shoots here effortlessly!
 const galleries = [
   {
     title: "Isaberg Session",
     subtitle: "8.08.2026",
-    url: "/isaberg26",
+    url: `${cleanBase}/isaberg26/`,
     cover: isabergCover,
   },
   {
     title: "China Hotpot Bakalarska",
     subtitle: "27.07.2026",
-    url: "/hotpot",
+    url: `${cleanBase}/hotpot/`,
     cover: hotpotCover,
   },
   {
     title: "Pumptrack Arctic Series - Kiruna",
     subtitle: "View 24 Photos",
-    url: "/kiruna",
+    url: `${cleanBase}/kiruna/`,
     cover: kirunaCover,
   },
 ];
