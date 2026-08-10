@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://szerlingjan.github.io/portfolio/",
-  base: "/portfolio",
+  base: "/portfolio/",
   devToolbar: {
     enabled: false,
   },
