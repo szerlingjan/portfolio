@@ -1,5 +1,8 @@
 ---
 import BaseLayout from "~/layouts/BaseLayout.astro";
+
+const base = import.meta.env.BASE_URL || "/portfolio/";
+const cleanBase = base.replace(/\/$/, "");
 ---
 
 <BaseLayout title="Licensing" description="Image licensing and usage terms for photography by Jan Szerling">
@@ -44,7 +47,7 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
     <div class="licensing-cta">
       <h3>Need a custom quote?</h3>
       <p>Reach out directly with your project details, intended media, and duration to secure usage rights.</p>
-      <a href="/portfolio/contact" class="cta-button">Inquire Now</a>
+      <a href={`${cleanBase}/contact/`} class="cta-button">Inquire Now</a>
     </div>
   </div>
 </BaseLayout>
