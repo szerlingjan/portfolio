@@ -111,7 +111,7 @@ try {
   .justified-gallery {
     --padding: max(2.5vw, 12px);
     --space: max(2.5vw, 12px);
-    --min-height: clamp(200px, 20vw, 400px);
+    --min-height: clamp(180px, 20vw, 400px);
 
     padding: var(--padding);
     display: flex;
@@ -122,6 +122,7 @@ try {
 
     .gallery-item {
       position: relative;
+      /* On desktop: calculate justified layout */
       flex-grow: calc(var(--width) * (100000 / var(--height)));
       flex-basis: calc(var(--min-height) * (var(--width) / var(--height)));
       aspect-ratio: var(--width) / var(--height);
@@ -171,6 +172,22 @@ try {
     &::after {
       content: " ";
       flex-grow: 1000000000;
+    }
+  }
+
+  /* MOBILE FIX: Let 1-column images scale naturally without cropping top/bottom */
+  @media (max-width: 640px) {
+    .justified-gallery {
+      .gallery-item {
+        flex-grow: 0;
+        flex-basis: 100%; /* Force 1 full-width column on mobile */
+        height: auto;
+      }
+
+      /* Make download button always visible on mobile since there is no hover state */
+      .download-btn {
+        opacity: 0.8;
+      }
     }
   }
 </style>

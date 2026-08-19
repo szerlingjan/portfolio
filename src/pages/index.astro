@@ -7,7 +7,6 @@ const prefix = base.startsWith("/") ? base : `/${base}`;
 const normalizedBase = prefix.endsWith("/") ? prefix : `${prefix}/`;
 
 // THE GALLERY LIST: Hosted on Cloudinary
-// Configured in the exact order requested with available covers
 const galleries = [
   {
     title: "Marma Pumptrack Competition",
@@ -73,6 +72,51 @@ const galleries = [
     height: 4000,
   },
   {
+    title: "Volleyball",
+    subtitle: "View Photos",
+    url: `${normalizedBase}vball/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/vball-cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
+  {
+    title: "Beach Volleyball",
+    subtitle: "View Photos",
+    url: `${normalizedBase}vbbeach/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/vbbeach-cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
+  {
+    title: "Jazzda jazz festival",
+    subtitle: "View Photos",
+    url: `${normalizedBase}jazzda/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/jazzda_cover.jpg",
+    width: 4000,
+    height: 3000,
+  },
+  {
+    title: "Madeira",
+    subtitle: "View Photos",
+    url: `${normalizedBase}madeira/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/madeira-cover.jpg",
+    width: 4000,
+    height: 3000,
+  },
+  {
+    title: "MTB WC in Switzerland",
+    subtitle: "View Photos",
+    url: `${normalizedBase}switzerland/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/switzerland-cover.jpg",
+    width: 4000,
+    height: 3000,
+  },
+  {
     title: "Crankworx 2024",
     subtitle: "View Photos",
     url: `${normalizedBase}crankworx24/`,
@@ -88,7 +132,6 @@ const galleries = [
   <main class="justified-gallery">
     
     {galleries.map((gallery) => {
-      // Read dimensions directly from the gallery object instead of local metadata
       const isLandscape = gallery.width > gallery.height;
       
       return (
@@ -99,7 +142,6 @@ const galleries = [
             style={`--width: ${gallery.width}; --height: ${gallery.height};`}
           >
             <div class="image-wrapper">
-              <!-- Replaced <Image /> with standard <img> tag pointing directly to Cloudinary -->
               <img src={gallery.cover} alt={gallery.title} loading="lazy" />
               <div class="hover-text">
                 <h2>{gallery.title}</h2>
