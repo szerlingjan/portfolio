@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 
 export default defineConfig({
   site: "https://janphoto.eu",
-  base: "/portfolio/",
+  base: "/",
   devToolbar: {
     enabled: false,
   },
