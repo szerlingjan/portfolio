@@ -1,47 +1,78 @@
 ---
-import { Image } from "astro:assets";
 import BaseLayout from "~/layouts/BaseLayout.astro";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import { v2 as cloudinary } from "cloudinary";
 
-const images = import.meta.glob<{ default: ImageMetadata }>(
-  "../images/kiruna/*.{jpg,jpeg,png,webp}",
-);
+// 1. Configure Cloudinary
+cloudinary.config({
+  cloud_name: import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: import.meta.env.CLOUDINARY_API_KEY,
+  api_secret: import.meta.env.CLOUDINARY_API_SECRET,
+  secure: true,
+});
+
+// Automatically extract the slug from the URL path (e.g., "/portfolio/crankworx24/" -> "crankworx24")
+const pathname = Astro.url.pathname;
+const slug = pathname.split("/").filter(Boolean).pop() || "";
+
+// Dynamically set folder path to match file/route name
+const folderPath = `images/${slug}`;
+let photos = [];
+
+try {
+  console.log(`\n🔍 Searching Cloudinary for folder: "${folderPath}"...`);
+
+  const searchResult = await cloudinary.search
+    .expression(`folder:"${folderPath}"`)
+    .sort_by("public_id", "asc")
+    .max_results(150)
+    .execute();
+
+  photos = searchResult.resources.filter(
+    (file: any) => file.resource_type === "image",
+  );
+  console.log(`✅ Success! Found ${photos.length} photos in ${folderPath}.`);
+} catch (error) {
+  console.error("❌ CLOUDINARY ERROR:");
+  console.error(error);
+}
 ---
 
-<BaseLayout
-  title="Isaberg Gallery"
-  description="Photography Portfolio Gallery"
->
+<BaseLayout title="Isaberg Gallery" description="Photography Portfolio Gallery">
   <section class="justified-gallery" id="photoswipe">
     {
-      Object.entries(images).map(async ([_path, image], index) => {
-        const { default: imageData } = await image();
-        return (
-          <div class="gallery-item" style={`--width: ${imageData.width}; --height: ${imageData.height};`}>
-            <a
-              href={imageData.src}
-              target="_blank"
-              data-fancybox="gallery"
-            >
-              <Image
-                format="webp"
-                src={imageData}
-                alt=""
-                height={400}
-                loading={index < 20 ? "eager" : "lazy"}
-              />
-            </a>
-            <!-- Download Button Overlay -->
-            <a href={imageData.src} download class="download-btn" title="Download Image">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-            </a>
-          </div>
-        );
-      })
+      photos.length === 0 ? (
+        <h2 style="color: white; padding-top: 50px;">No photos found. Check your terminal!</h2>
+      ) : (
+        photos.map((photo: any, index: number) => {
+          // Bumping the height to 800px ensures crisp, high-quality thumbnails on Retina/4K displays
+          const thumbUrl = cloudinary.url(photo.public_id, {
+            height: 800,
+            crop: "scale",
+            fetch_format: "auto",
+            quality: "auto",
+            secure: true,
+          });
+
+          // The full resolution secure URL
+          const fullUrl = photo.secure_url;
+
+          return (
+            <div class="gallery-item" style={`--width: ${photo.width}; --height: ${photo.height};`}>
+              <a href={fullUrl} target="_blank" data-fancybox="gallery">
+                <img src={thumbUrl} alt="Gallery Image" loading={index < 20 ? "eager" : "lazy"} />
+              </a>
+              <a href={fullUrl} download class="download-btn" title="Download Image">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          );
+        })
+      )
     }
   </section>
 </BaseLayout>
@@ -63,7 +94,8 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
         display: {
           left: [],
           middle: [],
-          right: ["close"],
+          // Added "download" here so the user can grab the high-res file while viewing fullscreen
+          right: ["download", "close"], 
         },
       },
       transition: "slide",

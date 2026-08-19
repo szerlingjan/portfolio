@@ -1,36 +1,85 @@
 ---
-import { Image } from "astro:assets";
 import BaseLayout from "~/layouts/BaseLayout.astro";
-
-// 1. IMPORT ALL YOUR COVER PHOTOS HERE AT THE TOP
-import hotpotCover from "../images/hotpot-cover.jpg";
-import isabergCover from "../images/isaberg-cover.jpg";
-import kirunaCover from "../images/kirunacover.jpg";
 
 // Bulletproof base path helper
 const base = import.meta.env.BASE_URL || "/portfolio/";
 const prefix = base.startsWith("/") ? base : `/${base}`;
 const normalizedBase = prefix.endsWith("/") ? prefix : `${prefix}/`;
 
-// 2. THE GALLERY LIST: Add new shoots here effortlessly!
+// THE GALLERY LIST: Hosted on Cloudinary
+// Configured in the exact order requested with available covers
 const galleries = [
+  {
+    title: "Marma Pumptrack Competition",
+    subtitle: "14-16.08.2026",
+    url: `${normalizedBase}marma/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787129183/marma-cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
   {
     title: "Isaberg Session",
     subtitle: "8.08.2026",
     url: `${normalizedBase}isaberg26/`,
-    cover: isabergCover,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/isaberg-cover.jpg",
+    width: 3000,
+    height: 4000,
   },
   {
     title: "China Hotpot Bakalarska",
     subtitle: "27.07.2026",
     url: `${normalizedBase}hotpot/`,
-    cover: hotpotCover,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066500/hotpot-cover.jpg",
+    width: 3010,
+    height: 4000,
+  },
+  {
+    title: "Pickleball Polish Cup",
+    subtitle: "17-19.07.2026",
+    url: `${normalizedBase}pickleball/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066500/pickleball-cover.jpg",
+    width: 3010,
+    height: 4000,
   },
   {
     title: "Pumptrack Arctic Series - Kiruna",
-    subtitle: "View 24 Photos",
+    subtitle: "View Photos",
     url: `${normalizedBase}kiruna/`,
-    cover: kirunaCover,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/kirunacover.jpg",
+    width: 4000,
+    height: 3000,
+  },
+  {
+    title: "Pumptrack Arctic Series - Narvik",
+    subtitle: "View Photos",
+    url: `${normalizedBase}narvik-spts/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/narvik-cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
+  {
+    title: "Pumptrack Arctic Series - Ylläs",
+    subtitle: "View Photos",
+    url: `${normalizedBase}yllas-spts/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/yllas-cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
+  {
+    title: "Crankworx 2024",
+    subtitle: "View Photos",
+    url: `${normalizedBase}crankworx24/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787066501/crankworx24-cover.jpg",
+    width: 4000,
+    height: 3000,
   },
 ];
 ---
@@ -39,18 +88,19 @@ const galleries = [
   <main class="justified-gallery">
     
     {galleries.map((gallery) => {
-      const imgMeta = gallery.cover;
-      const isLandscape = imgMeta.width > imgMeta.height;
+      // Read dimensions directly from the gallery object instead of local metadata
+      const isLandscape = gallery.width > gallery.height;
       
       return (
         <div class={`gallery-container ${isLandscape ? 'landscape' : 'portrait'}`}>
           <a 
             href={gallery.url} 
             class="gallery-item" 
-            style={`--width: ${imgMeta.width}; --height: ${imgMeta.height};`}
+            style={`--width: ${gallery.width}; --height: ${gallery.height};`}
           >
             <div class="image-wrapper">
-              <Image src={gallery.cover} alt={gallery.title} />
+              <!-- Replaced <Image /> with standard <img> tag pointing directly to Cloudinary -->
+              <img src={gallery.cover} alt={gallery.title} loading="lazy" />
               <div class="hover-text">
                 <h2>{gallery.title}</h2>
                 <p>{gallery.subtitle}</p>
