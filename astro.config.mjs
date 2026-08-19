@@ -2,7 +2,7 @@ import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  site: "https://szerlingjan.github.io/portfolio/",
+  site: "https://janphoto.eu",
   base: "/portfolio/",
   devToolbar: {
     enabled: false,
