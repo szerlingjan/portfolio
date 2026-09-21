@@ -4,10 +4,38 @@ import BaseLayout from "~/layouts/BaseLayout.astro";
 // Bulletproof base path helper
 const base = import.meta.env.BASE_URL || "/portfolio/";
 const prefix = base.startsWith("/") ? base : `/${base}`;
-const normalizedBase = prefix.endsWith("/") ? prefix : `${prefix}/`;
-
-// THE GALLERY LIST: Hosted on Cloudinary
+const normalizedBase = prefix.endsWith("/") ? prefix : `${prefix}/`; // THE GALLERY LIST: Hosted on Cloudinary
 const galleries = [
+  {
+    title: "Pub Crawl + Intro Fest",
+    subtitle: "Intro Team SDU",
+    url: `${normalizedBase}pub_crawl_intro_fest/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787129183/pub_crawl_intro_fest_cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
+
+  {
+    title: "Dorm Race",
+    subtitle: "Intro Team SDU",
+    url: `${normalizedBase}dorm_race/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787129183/dorm_race_cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
+
+  {
+    title: "Beach Hangout",
+    subtitle: "Intro Team SDU",
+    url: `${normalizedBase}beach_hangout/`,
+    cover:
+      "https://res.cloudinary.com/mvsmxpee/image/upload/v1787129183/beach_hangout_cover.jpg",
+    width: 3000,
+    height: 4000,
+  },
+
   {
     title: "Marma Pumptrack Competition",
     subtitle: "14-16.08.2026",
